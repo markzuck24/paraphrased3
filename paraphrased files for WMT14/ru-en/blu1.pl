@@ -161,7 +161,7 @@ printf "BLEU = %f\n",
     $bleu;
 
 
-my $filename = 'b.txt';
+my $filename = 'b1.txt';
 
 open(FH, '>>', $filename) or die $!;
 

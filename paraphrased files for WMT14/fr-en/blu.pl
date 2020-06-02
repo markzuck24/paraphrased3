@@ -157,9 +157,19 @@ $bleu = $brevity_penalty * exp((my_log( $bleu[1] ) +
 				my_log( $bleu[2] ) +
 				my_log( $bleu[3] ) +
 				my_log( $bleu[4] ) ) / 4) ;
-printf "BLEU = %.2f\n",
-    100*$bleu;
+printf "BLEU = %f\n",
+    $bleu;
 
+
+my $filename = 'b.txt';
+
+open(FH, '>>', $filename) or die $!;
+
+ my $strg = $bleu."\n";
+
+print FH $strg;
+
+close(FH);
 
 # print STDERR "It is not advisable to publish scores from multi-bleu.perl.  The scores depend on your tokenizer, which is unlikely to be reproducible from your paper or consistent across research groups.  Instead you should detokenize then use mteval-v14.pl, which has a standard tokenization.  Scores from multi-bleu.perl can still be used for internal purposes when you have a consistent tokenizer.\n";
 
