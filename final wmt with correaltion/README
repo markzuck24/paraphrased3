@@ -1,0 +1,46 @@
+This package contains the source and data behind the results of WMT14 Metrics
+Task. The Makefile here was used to generate all the results. The command "make
+all" produces the following files: 
+
+    system.correlations.toEn
+    system.correlations.fromEn
+    segment.correlations.toEn
+    segment.correlations.fromEn
+
+which were published in the paper.
+
+If you want to reproduce also confidence intervals, change the following variables
+in Makefile:
+
+COMPUTE_CONFIDENCE = true
+SEGMENT_BOOTSTRAP_SAMPLES = 1000
+
+You can use this package to evaluate your metric(s) on wmt14 data and compare
+it with other metrics. Create a subdirectory in submissions/ and put your
+metrics data files in the submission format as described at
+http://www.statmt.org/wmt14/metrics-task/. The file names have to end with
+*.sys.score or *.seg.score.
+
+Requirements:
+ 
+ - The baselines/Makefile requires path to a compiled Moses, set the MOSESROOT
+   env. variable.
+
+ - Scripts require Python 3 with the following python packages installed:
+   scipy, tabulate
+
+Important content of this package:
+
+metrics-task-paper.pdf         - published paper with WMT14 metrics task results
+submissions/                   - directory with metrics data submitted by the task participants
+baselines/                     - directory with computation of baseline metrics
+compute-segment-correlations   - see ./compute-segment-correlations --help
+compute-system-correlations    - see ./compute-segment-correlations --help
+judgements-2014-05-14.csv      - file with raw human judgements
+human-2014-05-16.scores        - file with official system-level human scores (TrueSkill)
+human-2014-05-16.folded/       - this directory contains human scores computed on generated folds
+
+For further details please contact:
+  Matous Machacek <machacekmatous@gmail.com>
+  or
+  Ondrej Bojar <bojar@ufal.mff.cuni.cz>
