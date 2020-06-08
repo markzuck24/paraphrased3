@@ -5,7 +5,7 @@ HUMAN_SCORES = human-2014-05-16.scores
 HUMAN_FOLDED = human-2014-05-16.folded
 
 TO_EN   = fr-en de-en hi-en cs-en ru-en
-FROM_EN = en-fr en-de en-hi en-cs en-ru
+# FROM_EN = en-fr en-de en-hi en-cs en-ru
 
 # Should we compute system level confidences?
 COMPUTE_CONFIDENCE = false
@@ -14,15 +14,14 @@ COMPUTE_CONFIDENCE = false
 SEGMENT_BOOTSTRAP_SAMPLES = 0
 
 # The format of the output tables (plain,simple,grid,pipe,orgtbl,rst,mediawiki,latex)
-TABLE_FORMAT = plain
+TABLE_FORMAT = grid
 
 .PHONY: all clean realclean baselines
 
-all: system.correlations.toEn system.correlations.fromEn segment.correlations.toEn segment.correlations.fromEn
+all: system.correlations.toEn
 
 system.correlations.%: $(HUMAN_SCORES) $(HUMAN_FOLDED) baselines submissions
 	[ "$*" = "toEn" ] && DIRS="$(TO_EN)"; \
-	[ "$*" = "fromEn" ] && DIRS="$(FROM_EN)"; \
 	$(COMPUTE_CONFIDENCE) && FOLDED_RESULTS="$(HUMAN_FOLDED)/*.human.scores"; \
 	./compute-system-correlations \
 		--metrics submissions/*/*.sys.score \
@@ -33,25 +32,11 @@ system.correlations.%: $(HUMAN_SCORES) $(HUMAN_FOLDED) baselines submissions
 		--samples $$FOLDED_RESULTS \
 		> $@
 
-segment.correlations.%: $(HUMAN_JUDGMENTS) baselines submissions
-	[ "$*" = "toEn" ] && DIRS="$(TO_EN)"; \
-	[ "$*" = "fromEn" ] && DIRS="$(FROM_EN)"; \
-	./compute-segment-correlations \
-		--judgments $< \
-		--metrics submissions/*/*.seg.score \
-				  baselines/*.seg.score \
-		--directions $$DIRS \
-		--variant wmt14 \
-		--bootstrap $(SEGMENT_BOOTSTRAP_SAMPLES) \
-		--rseed 1234 \
-		--tablefmt $(TABLE_FORMAT) \
-		> $@
-
 baselines:
 	$(MAKE) -C $@
 
 clean:
-	rm -rf *.toEn *fromEn
+	rm -rf *.toEn
 
 realclean: clean
 	$(MAKE) -C baselines clean
